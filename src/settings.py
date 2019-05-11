@@ -3,10 +3,10 @@ import os
 
 SCRIPT_DIR = os.path.dirname(__file__)
 BASE_DIR = os.path.join(SCRIPT_DIR, '..')
-#LOG_DIR = os.path.join(SCRIPT_DIR, '../logs/')
-LOG_DIR = 'd:/projects/visnav/logs/'
-#CACHE_DIR = os.path.join(SCRIPT_DIR, '../cache/')
-CACHE_DIR = 'd:/projects/visnav/cache/'
+LOG_DIR = os.path.join(SCRIPT_DIR, '../logs/')
+#LOG_DIR = 'd:/projects/visnav/logs/'
+CACHE_DIR = os.path.join(SCRIPT_DIR, '../cache/')
+#CACHE_DIR = 'd:/projects/visnav/cache/'
 
 USE_ICRS = True  # if true, use barycentric equatorial system, else heliocentric ecliptic
 

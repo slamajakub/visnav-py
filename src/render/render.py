@@ -5,7 +5,7 @@ import numpy as np
 import quaternion
 
 import moderngl
-from moderngl.ext.obj import Obj
+from ModernGL.ext.obj import Obj
 
 from algo import tools
 from algo.image import ImageProc
@@ -63,6 +63,7 @@ class RenderEngine:
 
 
     def __init__(self, view_width, view_height, antialias_samples=0):
+        antialias_samples=4
         if RenderEngine._ctx is None:
             RenderEngine._ctx = moderngl.create_standalone_context()
 
