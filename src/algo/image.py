@@ -188,3 +188,23 @@ class ImageProc():
             cv2.waitKey()
         
         return nxcorr
+    
+    @staticmethod
+    def bilateral_filtering(img):
+        # Alg. source: https://trs.jpl.nasa.gov/bitstream/handle/2014/8040/03-3444.pdf?sequence=1&isAllowed=y
+        
+        win = 15
+        sigma_space = 5
+        #pad_img = cv2.copyMakeBorder(img, np.floor(win/2), np.floor(win/2), np.floor(win/2), np.floor(win/2), cv2.BORDER_REPLICATE)
+        
+        # sigma^2 = e(X^2) - e(X)^2
+        mu = cv2.blur(img, (win, win)) 
+        mu2 = cv2.blur(np.power(img, 2), (win, win))
+        # get a local variance on the window for each pixel
+        sigma = np.sqrt(mu2 - np.power(mu, 2))
+        
+        # get most common local variance
+        sigma_col = stats.mode(sigma.ravel())
+        sigma_col = sigma_col[0]
+        #sigma_col = 5
+        return cv2.bilateralFilter(img, win, sigma_col, sigma_space)
