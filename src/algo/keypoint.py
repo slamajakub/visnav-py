@@ -89,7 +89,7 @@ class KeypointAlgo(AlgorithmBase):
 
 
     def solve_pnp(self, orig_sce_img, outfile, feat=ORB, use_feature_db=False, adjust_sc_rot = False,
-            add_noise=False, scale_cam_img=False, vary_scale=False, match_mask_params=None, processing=False, **kwargs):
+            add_noise=False, scale_cam_img=False, vary_scale=False, match_mask_params=None, processing=True, **kwargs):
 
         # set max mem usable by reference features, scene features use rest of MAX_WORK_MEM
         ref_max_mem = KeypointAlgo.FDB_MAX_MEM if use_feature_db else KeypointAlgo.MAX_WORK_MEM/2
