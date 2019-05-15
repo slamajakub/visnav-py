@@ -193,10 +193,10 @@ class ImageProc():
     def bilateral_filtering(img):
         # Alg. source: https://trs.jpl.nasa.gov/bitstream/handle/2014/8040/03-3444.pdf?sequence=1&isAllowed=y
         
-        win = 15
+        win = 35
         sigma_space = 10
-        #pad_img = cv2.copyMakeBorder(img, np.floor(win/2), np.floor(win/2), np.floor(win/2), np.floor(win/2), cv2.BORDER_REPLICATE)
-        
+        shape = np.shape(img)
+
         # sigma^2 = e(X^2) - e(X)^2
 #        mu = cv2.blur(img, (win, win)) 
 #        mu2 = cv2.blur(np.power(img, 2), (win, win))
@@ -209,19 +209,9 @@ class ImageProc():
         sigma_col = 5
         
         img_bilat = cv2.bilateralFilter(img, win, sigma_col, sigma_space)
-        #cv2.imshow("Img", cv2.resize(img, (600,400)))
-        #cv2.imshow("Bilat", cv2.resize(img_bilat, (600,400)))
-        
-        #print(img[0:5][0:5])
-        #print(img_bilat[0:5][0:5])
-        res = img.astype(float) - img_bilat.astype(float)
-        #print("Min: " + str(np.min(res)) + ", max: " + str(np.max(res)))
+        img_bilat_2 = cv2.bilateralFilter(img, win, 100*sigma_col, 100*sigma_space)
+
+        res = img_bilat_2.astype(float) - img_bilat.astype(float)
         res = (res - np.min(res)) / (np.max(res) - np.min(res)) * 255.0
-        #print("Min: " + str(np.min(res)) + ", max: " + str(np.max(res)))
         res = res.astype(np.uint8)
-        #cv2.imshow("Diff", cv2.resize(res, (600, 400)))
-        #print(np.shape(img))
-        #print(res[0:5][0:5])
-        
-        #cv2.waitKey(0)
         return res
