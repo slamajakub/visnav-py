@@ -89,7 +89,8 @@ class KeypointAlgo(AlgorithmBase):
 
 
     def solve_pnp(self, orig_sce_img, outfile, feat=ORB, use_feature_db=False, adjust_sc_rot = False,
-            add_noise=False, scale_cam_img=False, vary_scale=False, match_mask_params=None, processing=True, **kwargs):
+            add_noise=False, scale_cam_img=False, vary_scale=False, match_mask_params=None, 
+            processing=True, win=35, sigma_col=5, sigma_space=10, sigma_coeff=100, **kwargs):
 
         # set max mem usable by reference features, scene features use rest of MAX_WORK_MEM
         ref_max_mem = KeypointAlgo.FDB_MAX_MEM if use_feature_db else KeypointAlgo.MAX_WORK_MEM/2
@@ -136,9 +137,9 @@ class KeypointAlgo(AlgorithmBase):
                 # normalize ref_img to match sce_img
                 ref_img = ImageProc.equalize_brightness(ref_img, orig_sce_img, percentile=99.999, image_gamma=1.8)
             if processing:
-                print("\033[0;32mINFO\033[00m: Bilateral Filter Applied")
-                ref_img = ImageProc.bilateral_filtering(ref_img)
-                orig_sce_img = ImageProc.bilateral_filtering(orig_sce_img)
+                #print("\033[0;32mINFO\033[00m: Bilateral Filter Applied")
+                ref_img = ImageProc.bilateral_filtering(ref_img, win, sigma_col, sigma_space, sigma_coeff)
+                orig_sce_img = ImageProc.bilateral_filtering(orig_sce_img, win, sigma_col, sigma_space, sigma_coeff)
             if False:
                 gamma = 1.0/1.8
                 ref_img = ImageProc.adjust_gamma(ref_img, gamma)

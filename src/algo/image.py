@@ -190,12 +190,12 @@ class ImageProc():
         return nxcorr
     
     @staticmethod
-    def bilateral_filtering(img):
+    def bilateral_filtering(img, win, sigma_col, sigma_space, sigma_coeff):
         # Alg. source: https://trs.jpl.nasa.gov/bitstream/handle/2014/8040/03-3444.pdf?sequence=1&isAllowed=y
         
-        win = 35
-        sigma_space = 10
-        shape = np.shape(img)
+        #win = 35
+        #sigma_space = 10
+        #shape = np.shape(img)
 
         # sigma^2 = e(X^2) - e(X)^2
 #        mu = cv2.blur(img, (win, win)) 
@@ -206,10 +206,11 @@ class ImageProc():
         # get most common local variance
 #        sigma_col = stats.mode(sigma.ravel())
 #        sigma_col = sigma_col[0]
-        sigma_col = 5
+        #sigma_col = 5
+        # sigma_coeff=100
         
         img_bilat = cv2.bilateralFilter(img, win, sigma_col, sigma_space)
-        img_bilat_2 = cv2.bilateralFilter(img, win, 100*sigma_col, 100*sigma_space)
+        img_bilat_2 = cv2.bilateralFilter(img, win, sigma_coeff*sigma_col, sigma_coeff*sigma_space)
 
         res = img_bilat_2.astype(float) - img_bilat.astype(float)
         res = (res - np.min(res)) / (np.max(res) - np.min(res)) * 255.0
