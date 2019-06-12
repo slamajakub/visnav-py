@@ -32,7 +32,7 @@ def get_system_model(mission, hi_res_shape_model=False):
     return sm
 
 
-def run_batch(mission, full_method, count, est_real_ast_orient=False):
+def run_batch(mission, full_method, count, est_real_ast_orient=False, processing=False, bilat=None):
     m = full_method.split('+')
     method=m[0]
     
@@ -115,6 +115,17 @@ def run_batch(mission, full_method, count, est_real_ast_orient=False):
     kwargs0.update(kwargs)
     kwargs = kwargs0
     
+    kwargs0 = {'processing':processing}
+    kwargs0.update(kwargs)
+    kwargs = kwargs0
+    if processing:
+        print("Bilateral filtering included")
+        
+    if bilat != None:
+        kwargs0 = {'win':bilat[0], 'sigma_col':bilat[1], 'sigma_space':bilat[2], 'sigma_coeff':bilat[3]}
+        kwargs0.update(kwargs)
+        kwargs = kwargs0
+    
     # shape model noise
     if 'smn_' in m:
         kwargs['smn_type'] = 'hi'
@@ -164,4 +175,14 @@ if __name__ == '__main__':
     count = sys.argv[3] if len(sys.argv) > 3 else 10
     est_ast_rot = sys.argv[4] == 'ear' if len(sys.argv) > 4 else False
 
-    run_batch(mission, full_method, count, est_real_ast_orient=est_ast_rot)
+
+    if len(sys.argv) > 5:
+        processing = sys.argv[5] == 'True'
+    else:
+        processing = False
+        
+    if len(sys.argv) > 9:
+        bilat = [int(sys.argv[6]), float(sys.argv[7]), float(sys.argv[8]), float(sys.argv[9])]
+        print("Win: " + str(sys.argv[6]) + ", sigma_col: " + str(sys.argv[7]) + ", sigma_space: " + str(sys.argv[8]) + ", sigma_coeff: " + str(sys.argv[9]))
+
+    run_batch(mission, full_method, count, est_real_ast_orient=est_ast_rot, processing=processing, bilat=bilat)
