@@ -193,16 +193,18 @@ class ImageProc():
     def bilateral_filtering(img, win, sigma_col, sigma_space, sigma_coeff):
         # Alg. source: https://trs.jpl.nasa.gov/bitstream/handle/2014/8040/03-3444.pdf?sequence=1&isAllowed=y
         
+        old_size = np.shape(img)
         img = cv2.resize(img, (512, 512))
         
         img_bilat = cv2.bilateralFilter(img, win, sigma_col, sigma_space)
-        #img_bilat_2 = cv2.bilateralFilter(img, win, sigma_coeff*sigma_col, sigma_coeff*sigma_space)
-        img_bilat_2 = cv2.GaussianBlur(img, (win, win), sigma_coeff)
+        img_bilat_2 = cv2.bilateralFilter(img, win, sigma_coeff*sigma_col, sigma_coeff*sigma_space)
+        #img_bilat_2 = cv2.GaussianBlur(img, (win, win), sigma_coeff)
 
         res = img_bilat_2.astype(float) - img_bilat.astype(float)
         res = (res - np.min(res)) / (np.max(res) - np.min(res)) * 255.0
         res = res.astype(np.uint8)
+
         #cv2.imshow("res", res)
-        #cv2.waitKey(1)
-        #res = cv2.resize(res, (1024, 1024))
+        #cv2.waitKey(0)
+        res = cv2.resize(res, old_size)
         return res

@@ -1,5 +1,5 @@
 #!/bin/bash
-WIN="11 21 31 41"
+WIN="11 21 31"
 sigma_col="10 30 50"
 sigma_space="10 30 50"
 sigma_coeff="10 30 50"
