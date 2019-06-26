@@ -195,6 +195,29 @@ class ImageProc():
         
         old_size = np.shape(img)
         img = cv2.resize(img, (512, 512))
+        cv2.imshow("", img)
+        
+        ret,thresh = cv2.threshold(img,20,255, cv2.THRESH_BINARY)
+        
+        #cv2.imshow("s", thresh)
+        #cv2.waitKey(0)
+        
+        contours, hierarchy = cv2.findContours(thresh, 1, 2)
+        
+        try:
+            w = np.max(contours[:][1]) - np.min(contours[:][1])
+            h = np.max(contours[:][0]) - np.min(contours[:][0])
+        except:
+            w = 0
+            h = 0
+            
+        print("Asteroid: " + str(w) + "x" + str(h) + ", win: " + str(win))
+        
+        w = np.max([w, h])
+        
+        win = (int) (win * w / 512)
+        if win % 2 == 0 or win == 0:
+            win += 1
         
         img_bilat = cv2.bilateralFilter(img, win, sigma_col, sigma_space)
         img_bilat_2 = cv2.bilateralFilter(img, win, sigma_coeff*sigma_col, sigma_coeff*sigma_space)
